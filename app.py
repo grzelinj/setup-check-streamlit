@@ -136,18 +136,25 @@ WHERE DISTRIBUTION_RULE_ID IN ({formatted_distribution_rule_ids})
 
     return Setup_check_all
 
-st.title('Przetwarzanie plików Excel')
+st.set_page_config(page_title="Setup Check Generator", layout="wide")
+
+st.title("✅ Setup Check Generator")
+st.write("""
+Wgraj swój plik Excel, a aplikacja automatycznie wyciągnie unikalne wartości
+i wygeneruje gotowe zapytania SQL do setup checków.
+""")
+
 uploaded_file = st.file_uploader("Wybierz plik Excel", type=["xlsx", "xls"])
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
-    
+
     # Dodaj pasek postępu tutaj
     progress_bar = st.progress(0)
     for i in range(100):
         time.sleep(0.01)
         progress_bar.progress(i + 1)
-    
+
     przetworzone_dane = przetworz_dane(df)
 
     st.text_area("Wynik", przetworzone_dane, height=500)
@@ -158,3 +165,6 @@ if uploaded_file is not None:
     text_data = to_text(przetworzone_dane)
 
     st.download_button(label='Pobierz wyniki jako plik tekstowy', data=text_data, file_name='Setup_check_all.txt')
+
+st.markdown("<br>", unsafe_allow_html=True)
+st.image("logo.png", width=150, caption="", output_format="PNG")
